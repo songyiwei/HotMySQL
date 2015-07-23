@@ -1,0 +1,31 @@
+###########################################
+#
+#
+#  Copy the example.mysql.cf to mysql.cf
+#
+#
+###########################################
+
+#database info
+
+#database IP or URL
+DBIP=127.0.0.1
+
+#database port
+DBPort=3306
+
+#database name
+DBName=wxks
+
+#database user name
+DBUser=root
+
+#database password
+DBPasswd=111111
+
+#MySQL config file path
+DBCnf=/etc/mysql/my.cnf
+
+#crontab
+#minute(0-59) hour(0-23) day(1-31) month(1-12) week(0-6)
+Crontab="0 0 * * *"

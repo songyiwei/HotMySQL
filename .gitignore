@@ -1,0 +1,10 @@
+tmp/*
+!tmp/.gitignore
+data/*
+!data/.gitignore
+config/*
+!config/example.mysql.cf
+logs/*
+!logs/.gitignore
+output/*
+!output/.gitignore
