@@ -15,13 +15,13 @@ DBIP=127.0.0.1
 DBPort=3306
 
 #database name
-DBName=wxks
+DBName="wxks"
 
 #database user name
-DBUser=root
+DBUser="root"
 
 #database password
-DBPasswd=111111
+DBPasswd="111111"
 
 #MySQL config file path
 DBCnf=/etc/mysql/my.cnf
