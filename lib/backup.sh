@@ -75,22 +75,6 @@ else
 fi
 
 #recovery binlog.sql to tmp database
-if [[ -f $DataPath/$DBName.sql ]]; then
-    cd $DBDataPath
-    rm -rf ${DBName}_binlog
-    mkdir ${DBName}_binlog
-    chown -R $DBRunUser:$DBRunUser ${DBName}_binlog
-    cd - 1>/dev/null 2>&1
-
-    _Result=`ExecSQL "source $DataPath/$DBName.sql" ${DBName}_binlog`
-    if [[ $_Result == "Fail" ]]; then
-        echo ""
-        echo "$NowDate | Make new tmp database ${DBName}_binlog faild !" | tee $LogPath/backup
-        exit 1
-    fi
-    unset _Result
-fi
-
 _Result=`ExecSQL "source $TmpPath/${DBName}_binlog_$NowDate.sql" ${DBName}_binlog`
 if [[ $_Result == "Fail" ]]; then
     echo ""
@@ -108,7 +92,7 @@ if [[ $_Result == "Fail" ]]; then
     echo "$NowDate | Dump database ${DBName}_binlog faild !" | tee $LogPath/backup
     exit 1
 else
-    cp $OutputPath/${DBName}_$NowDate.sql $DataPath/$DBName.sql
+    cp $OutputPath/${DBName}_$NowDate.sql $DBDataPath/$DBName.sql
     echo ""
     echo "$NowDate | Backup is OK ! $OutputPath/${DBName}_$NowDate.sql" | tee $LogPath/backup
 fi

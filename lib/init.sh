@@ -21,11 +21,6 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
-cd $DBDataPath
-cp -r $DBName ${DBName}_binlog
-chown -R $DBRunUser:$DBRunUser ${DBName}_binlog
-cd - 1>/dev/null 2>&1
-
 #start MySQL
 /etc/init.d/mysql start 1>/dev/null
 if [[ $? != 0 ]]; then
@@ -34,34 +29,34 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
-#create database tmp database
-#_Result=`ExecSQL "create database ${DBName}_binlog"`
-#if [[ $_Result == "Fail" ]]; then
-#    echo ""
-#    echo "Create database ${DBName}_binlog faild !"
-#    exit 1
-#fi
-#unset _Result
+create database tmp database
+_Result=`ExecSQL "create database ${DBName}_binlog"`
+if [[ $_Result == "Fail" ]]; then
+    echo ""
+    echo "Create database ${DBName}_binlog faild !"
+    exit 1
+fi
+unset _Result
 
 #backup database
-#_Result=`DumpSQL "$TmpPath/${DBName}_$NowDate.sql" $DBName`
-#if [[ $_Result == "Fail" ]]; then
-#    echo ""
-#    echo "Backup MySQL $DBName faild !"
-#    exit 1
-#fi
-#unset _Result
+_Result=`DumpSQL "$TmpPath/${DBName}_$NowDate.sql" $DBName`
+if [[ $_Result == "Fail" ]]; then
+    echo ""
+    echo "Backup MySQL $DBName faild !"
+    exit 1
+fi
+unset _Result
 
 #recovery tmp database
-#_Result=`ExecSQL "source $TmpPath/${DBName}_$NowDate.sql" ${DBName}_binlog`
-#if [[ $_Result == "Fail" ]]; then
-#    echo ""
-#    echo "Recovery MySQL ${DBName}_binlog faild !"
-#    exit 1
-#else
-#    rm -rf $TmpPath/${DBName}_$NowDate.sql
-#fi
-#unset _Result
+_Result=`ExecSQL "source $TmpPath/${DBName}_$NowDate.sql" ${DBName}_binlog`
+if [[ $_Result == "Fail" ]]; then
+    echo ""
+    echo "Recovery MySQL ${DBName}_binlog faild !"
+    exit 1
+else
+    rm -rf $TmpPath/${DBName}_$NowDate.sql
+fi
+unset _Result
 
 #build crontab
 echo "$Crontab $BinPath/HotMySQL.sh auto" > $TmpPath/Crontab
