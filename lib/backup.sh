@@ -70,8 +70,6 @@ if [[ $_IsWrong == 1 ]]; then
     echo ""
     echo "$NowDate | Export binlog faild !" | tee $LogPath/backup
     exit 1
-else
-    echo $NowPos > $DataPath/Position
 fi
 
 #recovery binlog.sql to tmp database
@@ -80,6 +78,8 @@ if [[ $_Result == "Fail" ]]; then
     echo ""
     echo "$NowDate | Recovery tmp database ${DBName}_binlog faild !" | tee $LogPath/backup
     exit 1
+else
+    echo $NowPos > $DataPath/Position
 fi
 unset _Result
 
