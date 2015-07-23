@@ -12,10 +12,10 @@ unset _IsExist
 
 MasterStat=`ExecSQL "show master status \G"`
 if [[ $MasterStat != "Fail" ]]; then
-    #get position
-    NowPos=`echo ${MasterStat##*\*} | awk '{print $2}'`
     #get binlog name
-    NowLogName=`echo ${MasterStat##*\*} | awk '{print $4}'`
+    NowLogName=`echo ${MasterStat##*\*} | awk '{print $2}'`
+    #get position
+    NowPos=`echo ${MasterStat##*\*} | awk '{print $4}'`
 fi
 
 if [[ ! -n $NowPos && ! -n $NowLogName ]]; then  
