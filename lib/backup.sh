@@ -71,7 +71,7 @@ if [[ $_IsWrong == 1 ]]; then
     echo "$NowDate | Export binlog faild !" | tee $LogPath/backup
     exit 1
 else
-    sed -i "s/use `$DBName`/use `${DBName}_binlog`/g" $TmpPath/${DBName}_binlog_$NowDate.sql
+    sed -i "s/use \`$DBName\`/use \`${DBName}_binlog\`/g" $TmpPath/${DBName}_binlog_$NowDate.sql
 fi
 
 #recovery binlog.sql to tmp database
