@@ -29,7 +29,7 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
-create database tmp database
+#create database tmp database
 _Result=`ExecSQL "create database ${DBName}_binlog"`
 if [[ $_Result == "Fail" ]]; then
     echo ""
