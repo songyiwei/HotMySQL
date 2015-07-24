@@ -45,10 +45,19 @@ if [[ $_Result == "Fail" ]]; then
     echo ""
     echo "Recovery MySQL ${DBName}_binlog faild !"
     exit 1
-else
-    rm -rf $TmpPath/${DBName}_$NowDate.sql
 fi
 unset _Result
+
+#make binlog.dat when init
+if [[ ! -f $DataPath/binlog.dat ]]; then
+    MasterStat=`ExecSQL "show master status \G"`
+    if [[ $MasterStat != "Fail" ]]; then
+        #get binlog name
+        NowLogName=`echo ${MasterStat##*\*} | awk '{print $2}'`
+    fi
+    mv $TmpPath/${DBName}_$NowDate.sql $DataPath/${DBName}_$NowYMD.sql
+    echo "$NowYMD $NowTime|$DataPath/${DBName}_$NowYMD.sql|$NewLogName" >> $DataPath/binlog.dat
+fi
 
 #build crontab
 echo "$Crontab $BinPath/HotMySQL.sh auto" > $TmpPath/Crontab
