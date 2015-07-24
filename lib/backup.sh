@@ -25,7 +25,7 @@ if [[ ! -n $NowPos && ! -n $NowLogName ]]; then
 fi
 
 #to determine whether export
-if [[ -f $DataPath/Position ]]; then
+if [[ -f $DataPath/Position.dat ]]; then
     LastPos=`cat $DataPath/Position`
 else
     LastPos=""
@@ -39,6 +39,11 @@ if [[ $Mode == "auto" ]]; then
         exit 1
     fi
     unset _Result
+    MasterStat=`ExecSQL "show master status \G"`
+    if [[ $MasterStat != "Fail" ]]; then
+        #get binlog name
+        NewLogName=`echo ${MasterStat##*\*} | awk '{print $2}'`
+    fi
     if [[ -n $LastPos ]]; then
         mysqlbinlog --start-position=$LastPos /var/log/mysql/$NowLogName > $TmpPath/${DBName}_binlog_$NowDate.sql
         if [[ $? != 0 ]]; then
@@ -79,7 +84,7 @@ if [[ $_Result == "Fail" ]]; then
     echo "$NowDate | Recovery tmp database ${DBName}_binlog faild !" | tee $LogPath/backup
     exit 1
 else
-    echo $NowPos > $DataPath/Position
+    echo $NowPos > $DataPath/Position.dat
 fi
 unset _Result
 
@@ -90,6 +95,10 @@ if [[ $_Result == "Fail" ]]; then
     echo "$NowDate | Dump database ${DBName}_binlog faild !" | tee $LogPath/backup
     exit 1
 else
+    if [[ $Mode == "auto" ]]; then
+        cp $OutputPath/${DBName}_$NowDate.sql $DataPath/${DBName}_$NowYMD.sql
+        echo "$NowYMD $NowTime|$DataPath/${DBName}_$NowYMD.sql|$NewLogName" >> $DataPath/binlog.dat
+    fi
     echo ""
     echo "$NowDate | Backup is OK ! $OutputPath/${DBName}_$NowDate.sql" | tee $LogPath/backup
 fi
