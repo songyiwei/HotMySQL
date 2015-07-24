@@ -1,3 +1,3 @@
 function GetDate {
-NowDate=`date +%Y%m%d%H%M%S`
+NowDate=`date +%y%m%d%H%M%S`
 }
