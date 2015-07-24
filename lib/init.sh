@@ -11,14 +11,22 @@ else
     sed -i "s/expire_logs_days.*/expire_logs_days = 7/" $DBCnf
     sed -i "s/max_binlog_size.*/max_binlog_size = 1024M/" $DBCnf
     sed -i "s/^#binlog_do_db.*/binlog_do_db = $DBName/" $DBCnf
+fi
 
-    #reboot MySQL
-    /etc/init.d/mysql restart 1>/dev/null
-    if [[ $? != 0 ]]; then
-        echo ""
-        echo "Reboot service MySQL faild !"
-        exit 1
-    fi
+#stop MySQL
+/etc/init.d/mysql stop 1>/dev/null
+if [[ $? != 0 ]]; then
+    echo ""
+    echo "Stop service MySQL faild !"
+    exit 1
+fi
+
+#start MySQL
+/etc/init.d/mysql start 1>/dev/null
+if [[ $? != 0 ]]; then
+    echo ""
+    echo "Start service MySQL faild !"
+    exit 1
 fi
 
 #create database tmp database

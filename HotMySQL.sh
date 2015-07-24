@@ -28,10 +28,13 @@ TmpPath="$(cd `dirname $0`;pwd)/tmp"
 DataPath="$(cd `dirname $0`;pwd)/data"
 OutputPath="$(cd `dirname $0`;pwd)/output"
 LogPath="$(cd `dirname $0`;pwd)/logs"
+DBDataPath=`cat $DBCnf | grep "^datadir" | awk '{print $3}'`
+DBRunUser=`cat $DBCnf | grep "^user" | awk '{print $3}'`
 
 case $Param1 in
 "init")
     Init
+    Backup
     ;;
 "backup")
     Backup
