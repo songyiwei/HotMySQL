@@ -1,6 +1,8 @@
 #!/bin/bash
 
 Param1=$1
+Param2=$2
+Param3=$3
 
 if [[ $UID != 0 ]]; then
     echo ""
@@ -39,9 +41,9 @@ case $Param1 in
 "backup")
     Backup
     ;;
-#"recovery")
-#    Recovery
-#    ;;
+"recovery")
+    Recovery $Param2 $Param3
+    ;;
 "auto")
     Backup auto
     ;;
