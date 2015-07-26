@@ -22,6 +22,7 @@ fi
 . lib/getdate.sh
 . lib/init.sh
 . lib/backup.sh
+. lib/recovery.sh
 
 GetDate
 

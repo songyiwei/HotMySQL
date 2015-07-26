@@ -98,8 +98,17 @@ if [[ $_Result == "Fail" ]]; then
     exit 1
 else
     if [[ $Mode == "auto" ]]; then
+        sed -i '/^ *$/d' $DataPath/binlog.dat
+        _Row=`cat $DataPath/binlog.dat | wc -l`
+        if (( $_Row >= 7 )); then
+            _RemoveSql=`head -n 1 $DataPath/binlog.dat | awk -F"|" '{print $2}'`
+            sed -i 1d $DataPath/binlog.dat
+            rm -rf $_RemoveSql
+        fi
         cp $OutputPath/${DBName}_$NowDate.sql $DataPath/${DBName}_$NowYMD.sql
         echo "$NowYMD $NowTime|$DataPath/${DBName}_$NowYMD.sql|$NewLogName" >> $DataPath/binlog.dat
+        unset _RemoveSql
+        unset _Row
     fi
     echo ""
     echo "$NowDate | Backup is OK ! $OutputPath/${DBName}_$NowDate.sql" | tee $LogPath/backup
