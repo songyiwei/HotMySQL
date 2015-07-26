@@ -13,9 +13,9 @@ unset _IsExist
 MasterStat=`ExecSQL "show master status \G"`
 if [[ $MasterStat != "Fail" ]]; then
     #get binlog name
-    NowLogName=`echo ${MasterStat##*\*} | awk '{print $2}'`
+    NowLogName=`echo ${MasterStat##*\*\*} | awk '{print $2}'`
     #get position
-    NowPos=`echo ${MasterStat##*\*} | awk '{print $4}'`
+    NowPos=`echo ${MasterStat##*\*\*} | awk '{print $4}'`
 fi
 
 if [[ ! -n $NowPos && ! -n $NowLogName ]]; then  
@@ -42,7 +42,7 @@ if [[ $Mode == "auto" ]]; then
     MasterStat=`ExecSQL "show master status \G"`
     if [[ $MasterStat != "Fail" ]]; then
         #get binlog name
-        NewLogName=`echo ${MasterStat##*\*} | awk '{print $2}'`
+        NewLogName=`echo ${MasterStat##*\*\*} | awk '{print $2}'`
     fi
     if [[ -n $LastPos ]]; then
         mysqlbinlog --start-position=$LastPos /var/log/mysql/$NowLogName > $TmpPath/${DBName}_binlog_$NowDate.sql
