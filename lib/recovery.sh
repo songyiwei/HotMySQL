@@ -8,10 +8,17 @@ if [[ ! -f $DataPath/binlog.dat ]]; then
     exit 1
 fi
 
+_IsFormat=`echo $YMD | grep "-"`
+if [[ ! -n $_IsFormat ]]; then
+    echo ""
+    echo "Data format is wrong ! Must like \"15-07-27 13:02:59\""
+    exit 1
+fi
+
 date +%s --date="$YMD $Time" 1>/dev/null
 if [[ $? != 0 ]]; then
     echo ""
-    echo "Data format is wrong !"
+    echo "Data format is wrong ! Must like \"15-07-27 13:02:59\""
     exit 1
 fi
 
