@@ -74,6 +74,7 @@ do
     BinlogNum=$(($BinlogNum+1))
     BinlogNum=`echo $BinlogNum | awk '{printf ("%06d\n",$1)}'`
 done
+sed -i "s/use \`$DBName\`/use \`${DBName}_tmp\`/g" $TmpPath/${DBName}_binlog.sql
 
 _Result=`ExecSQL "create database ${DBName}_tmp"`
 if [[ $_Result == "Fail" ]]; then
